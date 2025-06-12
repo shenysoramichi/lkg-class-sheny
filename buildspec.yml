@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 20
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws configure set default.region ap-northeast-1
+      - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 927281280530.dkr.ecr.ap-northeast-1.amazonaws.com
+  build:
+    commands:
+      - echo Running Maven build...
+      - cd BookManager2-master
+      - mvn clean package
+      - echo Copying JAR to tomcat/app directory...
+      - cp target/BookManager-1.0.5.jar ../tomcat/app/
+      - echo Building Docker image...
+      - cd ../tomcat
+      - docker build --no-cache -t lkg-class .
+      - docker tag lkg-class:latest 927281280530.dkr.ecr.ap-northeast-1.amazonaws.com/lkg-class:latest
+      - docker push 927281280530.dkr.ecr.ap-northeast-1.amazonaws.com/lkg-class:latest
+  post_build:
+    commands:
+      - echo Build and push completed.
+
+artifacts:
+  files:
+    - appspec.yml
+  discard-paths: yes
