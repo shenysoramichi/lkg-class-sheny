@@ -30,7 +30,7 @@
                         staticClass: "title-container"
                     }, [e("h3", {
                         staticClass: "title"
-                    }, [t._v("凌志大厦图书管理系统-登录界面")])]), e("el-form-item", {
+                    }, [t._v("凌志大厦图书管理系统-sheny登录界面")])]), e("el-form-item", {
                         attrs: {
                             prop: "username"
                         }
